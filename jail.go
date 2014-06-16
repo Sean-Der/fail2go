@@ -24,7 +24,7 @@ func JailStatus(jail string) (map[string]interface{}, error) {
 
 	output["currentlyBanned"] = action.([]interface{})[0].([]interface{})[1]
 	output["totalBanned"] = action.([]interface{})[1].([]interface{})[1]
-	output["ipList"] = action.([]interface{})[2].([]interface{})[1]
+	output["IPList"] = action.([]interface{})[2].([]interface{})[1]
 
 	return output, nil
 }
