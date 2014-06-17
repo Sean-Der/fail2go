@@ -44,3 +44,37 @@ func JailFailRegex(jail string) (map[string][]interface{}, error) {
 		"failregex": fail2banOutput.([]interface{})[1].([]interface{}),
 	}, nil
 }
+
+func JailBanIP(jail string, ip string) (map[string]string, error) {
+	fail2banInput := make([]string, 4)
+	fail2banInput[0] = "set"
+	fail2banInput[1] = jail
+	fail2banInput[2] = "banip"
+	fail2banInput[3] = ip
+
+	fail2banOutput, err := fail2banRequest(fail2banInput)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]string{
+		"bannedIP": fail2banOutput.([]interface{})[1].(string),
+	}, nil
+}
+
+func JailUnbanIP(jail string, ip string) (map[string]string, error) {
+	fail2banInput := make([]string, 4)
+	fail2banInput[0] = "set"
+	fail2banInput[1] = jail
+	fail2banInput[2] = "unbanip"
+	fail2banInput[3] = ip
+
+	fail2banOutput, err := fail2banRequest(fail2banInput)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]string{
+		"unbannedIP": fail2banOutput.([]interface{})[1].(string),
+	}, nil
+}
