@@ -3,9 +3,7 @@ package fail2go
 import ()
 
 func JailStatus(jail string) (map[string]interface{}, error) {
-	fail2banInput := make([]string, 2)
-	fail2banInput[0] = "status"
-	fail2banInput[1] = jail
+	fail2banInput := []string{"status", jail}
 
 	fail2banOutput, err := fail2banRequest(fail2banInput)
 	if err != nil {
@@ -30,10 +28,7 @@ func JailStatus(jail string) (map[string]interface{}, error) {
 }
 
 func JailFailRegex(jail string) (map[string][]interface{}, error) {
-	fail2banInput := make([]string, 3)
-	fail2banInput[0] = "get"
-	fail2banInput[1] = jail
-	fail2banInput[2] = "failregex"
+	fail2banInput := []string{"get", jail, "failregex"}
 
 	fail2banOutput, err := fail2banRequest(fail2banInput)
 	if err != nil {
@@ -46,11 +41,7 @@ func JailFailRegex(jail string) (map[string][]interface{}, error) {
 }
 
 func JailBanIP(jail string, ip string) (map[string]string, error) {
-	fail2banInput := make([]string, 4)
-	fail2banInput[0] = "set"
-	fail2banInput[1] = jail
-	fail2banInput[2] = "banip"
-	fail2banInput[3] = ip
+	fail2banInput := []string{"set", jail, "banip", ip}
 
 	fail2banOutput, err := fail2banRequest(fail2banInput)
 	if err != nil {
@@ -63,11 +54,7 @@ func JailBanIP(jail string, ip string) (map[string]string, error) {
 }
 
 func JailUnbanIP(jail string, ip string) (map[string]string, error) {
-	fail2banInput := make([]string, 4)
-	fail2banInput[0] = "set"
-	fail2banInput[1] = jail
-	fail2banInput[2] = "unbanip"
-	fail2banInput[3] = ip
+	fail2banInput := []string{"set", jail, "unbanip", ip}
 
 	fail2banOutput, err := fail2banRequest(fail2banInput)
 	if err != nil {

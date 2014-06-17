@@ -5,8 +5,7 @@ import (
 )
 
 func GlobalStatus() ([]string, error) {
-	fail2banInput := make([]string, 1)
-	fail2banInput[0] = "status"
+	fail2banInput := []string{"status"}
 
 	output, err := fail2banRequest(fail2banInput)
 	if err != nil {
@@ -19,8 +18,7 @@ func GlobalStatus() ([]string, error) {
 }
 
 func GlobalPing() (string, error) {
-	fail2banInput := make([]string, 1)
-	fail2banInput[0] = "ping"
+	fail2banInput := []string{"ping"}
 
 	output, err := fail2banRequest(fail2banInput)
 	if err != nil {
