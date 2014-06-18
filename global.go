@@ -7,14 +7,19 @@ import (
 func (conn *Fail2goConn) GlobalStatus() ([]string, error) {
 	fail2banInput := []string{"status"}
 
-	output, err := conn.fail2banRequest(fail2banInput)
+	fail2BanOutput, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}
 
 	//TODO use reflection to assert data structures and give proper errors
-	jails := output.([]interface{})[1].([]interface{})[1].([]interface{})[1]
-	return strings.Split(jails.(string), ","), nil
+	jails := fail2BanOutput.([]interface{})[1].([]interface{})[1].([]interface{})[1]
+	output := make([]string, 0)
+	for _, v := range strings.Split(jails.(string), ",") {
+		output = append(output, strings.TrimSpace(v))
+	}
+
+	return output, nil
 }
 
 func (conn *Fail2goConn) GlobalPing() (string, error) {
