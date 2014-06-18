@@ -1,11 +1,9 @@
 package fail2go
 
-import ()
-
-func JailStatus(jail string) (map[string]interface{}, error) {
+func (conn *Fail2goConn) JailStatus(jail string) (map[string]interface{}, error) {
 	fail2banInput := []string{"status", jail}
 
-	fail2banOutput, err := fail2banRequest(fail2banInput)
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}
@@ -27,10 +25,10 @@ func JailStatus(jail string) (map[string]interface{}, error) {
 	return output, nil
 }
 
-func JailFailRegex(jail string) (map[string][]interface{}, error) {
+func (conn *Fail2goConn) JailFailRegex(jail string) (map[string][]interface{}, error) {
 	fail2banInput := []string{"get", jail, "failregex"}
 
-	fail2banOutput, err := fail2banRequest(fail2banInput)
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}
@@ -40,10 +38,10 @@ func JailFailRegex(jail string) (map[string][]interface{}, error) {
 	}, nil
 }
 
-func JailBanIP(jail string, ip string) (map[string]string, error) {
+func (conn *Fail2goConn) JailBanIP(jail string, ip string) (map[string]string, error) {
 	fail2banInput := []string{"set", jail, "banip", ip}
 
-	fail2banOutput, err := fail2banRequest(fail2banInput)
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}
@@ -53,10 +51,10 @@ func JailBanIP(jail string, ip string) (map[string]string, error) {
 	}, nil
 }
 
-func JailUnbanIP(jail string, ip string) (map[string]string, error) {
+func (conn *Fail2goConn) JailUnbanIP(jail string, ip string) (map[string]string, error) {
 	fail2banInput := []string{"set", jail, "unbanip", ip}
 
-	fail2banOutput, err := fail2banRequest(fail2banInput)
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}

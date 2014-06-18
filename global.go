@@ -4,10 +4,10 @@ import (
 	"strings"
 )
 
-func GlobalStatus() ([]string, error) {
+func (conn *Fail2goConn) GlobalStatus() ([]string, error) {
 	fail2banInput := []string{"status"}
 
-	output, err := fail2banRequest(fail2banInput)
+	output, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}
@@ -17,10 +17,10 @@ func GlobalStatus() ([]string, error) {
 	return strings.Split(jails.(string), ","), nil
 }
 
-func GlobalPing() (string, error) {
+func (conn *Fail2goConn) GlobalPing() (string, error) {
 	fail2banInput := []string{"ping"}
 
-	output, err := fail2banRequest(fail2banInput)
+	output, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return "", err
 	}
