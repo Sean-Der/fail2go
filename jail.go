@@ -1,6 +1,12 @@
 package fail2go
 
-func (conn *Fail2goConn) JailStatus(jail string) (int64, int64, []interface{}, int64, int64, []interface{}, error) {
+import (
+	"errors"
+	"strconv"
+)
+
+//TODO use reflection to assert data structures and give proper errors
+func (conn *Fail2goConn) JailStatus(jail string) (int64, int64, []string, int64, int64, []string, error) {
 	fail2banInput := []string{"status", jail}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -8,27 +14,53 @@ func (conn *Fail2goConn) JailStatus(jail string) (int64, int64, []interface{}, i
 		return 0, 0, nil, 0, 0, nil, err
 	}
 
-	//TODO use reflection to assert data structures and give proper errors
 	action := fail2banOutput.([]interface{})[1].([]interface{})[1].([]interface{})[1]
 	filter := fail2banOutput.([]interface{})[1].([]interface{})[0].([]interface{})[1]
 
 	return filter.([]interface{})[0].([]interface{})[1].(int64),
 		filter.([]interface{})[1].([]interface{})[1].(int64),
-		filter.([]interface{})[2].([]interface{})[1].([]interface{}),
+		interfaceSliceToStringSlice(filter.([]interface{})[2].([]interface{})[1].([]interface{})),
 		action.([]interface{})[0].([]interface{})[1].(int64),
 		action.([]interface{})[1].([]interface{})[1].(int64),
-		action.([]interface{})[2].([]interface{})[1].([]interface{}),
+		interfaceSliceToStringSlice(action.([]interface{})[2].([]interface{})[1].([]interface{})),
 		nil
 }
 
-func (conn *Fail2goConn) JailFailRegex(jail string) ([]interface{}, error) {
+func (conn *Fail2goConn) JailFailRegex(jail string) ([]string, error) {
 	fail2banInput := []string{"get", jail, "failregex"}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
 	if err != nil {
 		return nil, err
 	}
-	return fail2banOutput.([]interface{})[1].([]interface{}), nil
+	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})[1].([]interface{})), nil
+}
+
+func (conn *Fail2goConn) JailAddFailRegex(jail string, regex string) ([]string, error) {
+	fail2banInput := []string{"set", jail, "addfailregex", regex}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return nil, err
+	}
+
+	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})[1].([]interface{})), nil
+}
+
+func (conn *Fail2goConn) JailDeleteFailRegex(jail string, regex string) (interface{}, error) {
+	currentRegexes, _ := conn.JailFailRegex(jail)
+	regexIndex := stringInSliceIndex(regex, currentRegexes)
+	if regexIndex == -1 {
+		return nil, errors.New("Regex is not in jail")
+	}
+
+	fail2banInput := []string{"set", jail, "delfailregex", strconv.Itoa(regexIndex)}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return nil, err
+	}
+	return fail2banOutput, nil
 }
 
 func (conn *Fail2goConn) JailBanIP(jail string, ip string) (string, error) {
