@@ -102,3 +102,23 @@ func (conn *Fail2goConn) JailSetFindTime(jail string, findTime int) (int64, erro
 	}
 	return fail2banOutput.([]interface{})[1].(int64), nil
 }
+
+func (conn *Fail2goConn) JailMaxRetry(jail string) (int64, error) {
+	fail2banInput := []string{"get", jail, "maxretry"}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return -1, err
+	}
+	return fail2banOutput.([]interface{})[1].(int64), nil
+}
+
+func (conn *Fail2goConn) JailSetMaxRetry(jail string, maxRetry int) (int64, error) {
+	fail2banInput := []string{"set", jail, "maxretry", strconv.Itoa(maxRetry)}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return -1, err
+	}
+	return fail2banOutput.([]interface{})[1].(int64), nil
+}
