@@ -82,3 +82,23 @@ func (conn *Fail2goConn) JailUnbanIP(jail string, ip string) (string, error) {
 	}
 	return fail2banOutput.([]interface{})[1].(string), nil
 }
+
+func (conn *Fail2goConn) JailFindTime(jail string) (int64, error) {
+	fail2banInput := []string{"get", jail, "findtime"}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return -1, err
+	}
+	return fail2banOutput.([]interface{})[1].(int64), nil
+}
+
+func (conn *Fail2goConn) JailSetFindTime(jail string, findTime int) (int64, error) {
+	fail2banInput := []string{"set", jail, "findtime", strconv.Itoa(findTime)}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return -1, err
+	}
+	return fail2banOutput.([]interface{})[1].(int64), nil
+}
