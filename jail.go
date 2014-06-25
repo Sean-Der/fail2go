@@ -122,3 +122,23 @@ func (conn *Fail2goConn) JailSetMaxRetry(jail string, maxRetry int) (int64, erro
 	}
 	return fail2banOutput.([]interface{})[1].(int64), nil
 }
+
+func (conn *Fail2goConn) JailUseDNS(jail string) (string, error) {
+	fail2banInput := []string{"get", jail, "usedns"}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return "", err
+	}
+	return fail2banOutput.([]interface{})[1].(string), nil
+}
+
+func (conn *Fail2goConn) JailSetUseDNS(jail string, useDNS string) (string, error) {
+	fail2banInput := []string{"set", jail, "usedns", useDNS}
+
+	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
+	if err != nil {
+		return "", err
+	}
+	return fail2banOutput.([]interface{})[1].(string), nil
+}
