@@ -7,7 +7,7 @@ import (
 	"net"
 )
 
-func (conn *Fail2goConn) fail2banRequest(input []string) (interface{}, error) {
+func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 	c, err := net.Dial("unix", conn.Fail2banSocket)
 
 	if err != nil {

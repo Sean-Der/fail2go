@@ -1,9 +1,9 @@
 package fail2go
 
-type Fail2goConn struct {
+type Conn struct {
 	Fail2banSocket string
 }
 
-func Newfail2goConn(fail2banSocket string) *Fail2goConn {
-	return &Fail2goConn{fail2banSocket}
+func Newfail2goConn(fail2banSocket string) *Conn {
+	return &Conn{fail2banSocket}
 }

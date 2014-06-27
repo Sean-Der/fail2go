@@ -6,7 +6,7 @@ import (
 )
 
 //TODO use reflection to assert data structures and give proper errors
-func (conn *Fail2goConn) JailStatus(jail string) (int64, int64, []string, int64, int64, []string, error) {
+func (conn *Conn) JailStatus(jail string) (int64, int64, []string, int64, int64, []string, error) {
 	fail2banInput := []string{"status", jail}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -26,7 +26,7 @@ func (conn *Fail2goConn) JailStatus(jail string) (int64, int64, []string, int64,
 		nil
 }
 
-func (conn *Fail2goConn) JailFailRegex(jail string) ([]string, error) {
+func (conn *Conn) JailFailRegex(jail string) ([]string, error) {
 	fail2banInput := []string{"get", jail, "failregex"}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -36,7 +36,7 @@ func (conn *Fail2goConn) JailFailRegex(jail string) ([]string, error) {
 	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})[1].([]interface{})), nil
 }
 
-func (conn *Fail2goConn) JailAddFailRegex(jail string, regex string) ([]string, error) {
+func (conn *Conn) JailAddFailRegex(jail string, regex string) ([]string, error) {
 	fail2banInput := []string{"set", jail, "addfailregex", regex}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -47,7 +47,7 @@ func (conn *Fail2goConn) JailAddFailRegex(jail string, regex string) ([]string, 
 	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})[1].([]interface{})), nil
 }
 
-func (conn *Fail2goConn) JailDeleteFailRegex(jail string, regex string) (interface{}, error) {
+func (conn *Conn) JailDeleteFailRegex(jail string, regex string) (interface{}, error) {
 	currentRegexes, _ := conn.JailFailRegex(jail)
 	regexIndex := stringInSliceIndex(regex, currentRegexes)
 	if regexIndex == -1 {
@@ -63,7 +63,7 @@ func (conn *Fail2goConn) JailDeleteFailRegex(jail string, regex string) (interfa
 	return fail2banOutput, nil
 }
 
-func (conn *Fail2goConn) JailBanIP(jail string, ip string) (string, error) {
+func (conn *Conn) JailBanIP(jail string, ip string) (string, error) {
 	fail2banInput := []string{"set", jail, "banip", ip}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -73,7 +73,7 @@ func (conn *Fail2goConn) JailBanIP(jail string, ip string) (string, error) {
 	return fail2banOutput.([]interface{})[1].(string), nil
 }
 
-func (conn *Fail2goConn) JailUnbanIP(jail string, ip string) (string, error) {
+func (conn *Conn) JailUnbanIP(jail string, ip string) (string, error) {
 	fail2banInput := []string{"set", jail, "unbanip", ip}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -83,7 +83,7 @@ func (conn *Fail2goConn) JailUnbanIP(jail string, ip string) (string, error) {
 	return fail2banOutput.([]interface{})[1].(string), nil
 }
 
-func (conn *Fail2goConn) JailFindTime(jail string) (int64, error) {
+func (conn *Conn) JailFindTime(jail string) (int64, error) {
 	fail2banInput := []string{"get", jail, "findtime"}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -93,7 +93,7 @@ func (conn *Fail2goConn) JailFindTime(jail string) (int64, error) {
 	return fail2banOutput.([]interface{})[1].(int64), nil
 }
 
-func (conn *Fail2goConn) JailSetFindTime(jail string, findTime int) (int64, error) {
+func (conn *Conn) JailSetFindTime(jail string, findTime int) (int64, error) {
 	fail2banInput := []string{"set", jail, "findtime", strconv.Itoa(findTime)}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -103,7 +103,7 @@ func (conn *Fail2goConn) JailSetFindTime(jail string, findTime int) (int64, erro
 	return fail2banOutput.([]interface{})[1].(int64), nil
 }
 
-func (conn *Fail2goConn) JailMaxRetry(jail string) (int64, error) {
+func (conn *Conn) JailMaxRetry(jail string) (int64, error) {
 	fail2banInput := []string{"get", jail, "maxretry"}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -113,7 +113,7 @@ func (conn *Fail2goConn) JailMaxRetry(jail string) (int64, error) {
 	return fail2banOutput.([]interface{})[1].(int64), nil
 }
 
-func (conn *Fail2goConn) JailSetMaxRetry(jail string, maxRetry int) (int64, error) {
+func (conn *Conn) JailSetMaxRetry(jail string, maxRetry int) (int64, error) {
 	fail2banInput := []string{"set", jail, "maxretry", strconv.Itoa(maxRetry)}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -123,7 +123,7 @@ func (conn *Fail2goConn) JailSetMaxRetry(jail string, maxRetry int) (int64, erro
 	return fail2banOutput.([]interface{})[1].(int64), nil
 }
 
-func (conn *Fail2goConn) JailUseDNS(jail string) (string, error) {
+func (conn *Conn) JailUseDNS(jail string) (string, error) {
 	fail2banInput := []string{"get", jail, "usedns"}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)
@@ -133,7 +133,7 @@ func (conn *Fail2goConn) JailUseDNS(jail string) (string, error) {
 	return fail2banOutput.([]interface{})[1].(string), nil
 }
 
-func (conn *Fail2goConn) JailSetUseDNS(jail string, useDNS string) (string, error) {
+func (conn *Conn) JailSetUseDNS(jail string, useDNS string) (string, error) {
 	fail2banInput := []string{"set", jail, "usedns", useDNS}
 
 	fail2banOutput, err := conn.fail2banRequest(fail2banInput)

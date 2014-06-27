@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func (conn *Fail2goConn) GlobalStatus() ([]string, error) {
+func (conn *Conn) GlobalStatus() ([]string, error) {
 	fail2banInput := []string{"status"}
 
 	fail2BanOutput, err := conn.fail2banRequest(fail2banInput)
@@ -22,7 +22,7 @@ func (conn *Fail2goConn) GlobalStatus() ([]string, error) {
 	return output, nil
 }
 
-func (conn *Fail2goConn) GlobalPing() (string, error) {
+func (conn *Conn) GlobalPing() (string, error) {
 	fail2banInput := []string{"ping"}
 
 	output, err := conn.fail2banRequest(fail2banInput)
