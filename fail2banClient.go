@@ -3,7 +3,7 @@ package fail2go
 import (
 	"bytes"
 	"errors"
-	"github.com/kisielk/og-rek"
+	"github.com/Sean-Der/og-rek"
 	"net"
 )
 
