@@ -51,9 +51,8 @@ func (conn *Conn) JailAddFailRegex(jail string, regex string) ([]string, error) 
 		return nil, errors.New(fail2banOutput.(ogórek.Call).Args[0].(string))
 	case []interface{}:
 		return interfaceSliceToStringSlice(fail2banOutput.([]interface{})), nil
-	default:
-		return nil, errors.New("Unexpected output from fail2ban")
 	}
+	return nil, errors.New("Unexpected output from fail2ban")
 }
 
 func (conn *Conn) JailDeleteFailRegex(jail string, regex string) (interface{}, error) {
