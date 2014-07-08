@@ -6,22 +6,22 @@ import (
 	"strconv"
 )
 
-func (conn *Conn) JailStatus(jail string) (int64, int64, []string, int64, int64, []string, error) {
+func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed int64, fileList []string, currentlyBanned int64, totalBanned int64, IPList []string, err error) {
 	fail2banOutput, err := conn.fail2banRequest([]string{"status", jail})
 	if err != nil {
-		return 0, 0, nil, 0, 0, nil, err
+		return
 	}
 
 	action := fail2banOutput.([]interface{})[1].([]interface{})[1].([]interface{})[1]
 	filter := fail2banOutput.([]interface{})[1].([]interface{})[0].([]interface{})[1]
 
-	return filter.([]interface{})[0].([]interface{})[1].(int64),
-		filter.([]interface{})[1].([]interface{})[1].(int64),
-		interfaceSliceToStringSlice(filter.([]interface{})[2].([]interface{})[1].([]interface{})),
-		action.([]interface{})[0].([]interface{})[1].(int64),
-		action.([]interface{})[1].([]interface{})[1].(int64),
-		interfaceSliceToStringSlice(action.([]interface{})[2].([]interface{})[1].([]interface{})),
-		nil
+	currentlyFailed = filter.([]interface{})[0].([]interface{})[1].(int64)
+	totalFailed = filter.([]interface{})[1].([]interface{})[1].(int64)
+	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].([]interface{})[1].([]interface{}))
+	currentlyBanned = action.([]interface{})[0].([]interface{})[1].(int64)
+	totalBanned = action.([]interface{})[1].([]interface{})[1].(int64)
+	IPList = interfaceSliceToStringSlice(action.([]interface{})[2].([]interface{})[1].([]interface{}))
+	return
 }
 
 func (conn *Conn) JailFailRegex(jail string) ([]string, error) {
