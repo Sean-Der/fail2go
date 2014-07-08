@@ -5,14 +5,11 @@ import (
 )
 
 func (conn *Conn) GlobalStatus() ([]string, error) {
-	fail2banInput := []string{"status"}
-
-	fail2BanOutput, err := conn.fail2banRequest(fail2banInput)
+	fail2BanOutput, err := conn.fail2banRequest([]string{"status"})
 	if err != nil {
 		return nil, err
 	}
 
-	//TODO use reflection to assert data structures and give proper errors
 	jails := fail2BanOutput.([]interface{})[1].([]interface{})[1].([]interface{})[1]
 	output := make([]string, 0)
 	for _, v := range strings.Split(jails.(string), ",") {
@@ -23,13 +20,10 @@ func (conn *Conn) GlobalStatus() ([]string, error) {
 }
 
 func (conn *Conn) GlobalPing() (string, error) {
-	fail2banInput := []string{"ping"}
-
-	output, err := conn.fail2banRequest(fail2banInput)
+	output, err := conn.fail2banRequest([]string{"ping"})
 	if err != nil {
 		return "", err
 	}
 
-	//TODO use reflection to assert data structures and give proper errors
 	return output.([]interface{})[1].(string), nil
 }
