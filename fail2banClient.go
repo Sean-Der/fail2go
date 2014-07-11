@@ -34,6 +34,9 @@ func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 	}
 
 	dec := ogórek.NewDecoder(bytes.NewBuffer(buf))
-	v, err := dec.Decode()
-	return v, err
+	fail2BanOutput, err := dec.Decode()
+	if fail2BanOutput != nil && err == nil {
+			fail2BanOutput = fail2BanOutput.([]interface{})[1]
+	}
+	return fail2BanOutput, err
 }

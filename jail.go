@@ -12,8 +12,8 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 		return
 	}
 
-	action := fail2banOutput.([]interface{})[1].([]interface{})[1].([]interface{})[1]
-	filter := fail2banOutput.([]interface{})[1].([]interface{})[0].([]interface{})[1]
+	action := fail2banOutput.([]interface{})[1].([]interface{})[1]
+	filter := fail2banOutput.([]interface{})[0].([]interface{})[1]
 
 	currentlyFailed = filter.([]interface{})[0].([]interface{})[1].(int64)
 	totalFailed = filter.([]interface{})[1].([]interface{})[1].(int64)
@@ -29,7 +29,7 @@ func (conn *Conn) JailFailRegex(jail string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})[1].([]interface{})), nil
+	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})), nil
 }
 
 func (conn *Conn) JailAddFailRegex(jail string, regex string) ([]string, error) {
@@ -37,7 +37,6 @@ func (conn *Conn) JailAddFailRegex(jail string, regex string) ([]string, error) 
 	if err != nil {
 		return nil, err
 	}
-	fail2banOutput = fail2banOutput.([]interface{})[1]
 
 	switch fail2banOutput.(type) {
 	case ogórek.Call:
@@ -67,7 +66,7 @@ func (conn *Conn) JailBanIP(jail string, ip string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fail2banOutput.([]interface{})[1].(string), nil
+	return fail2banOutput.(string), nil
 }
 
 func (conn *Conn) JailUnbanIP(jail string, ip string) (string, error) {
@@ -75,7 +74,7 @@ func (conn *Conn) JailUnbanIP(jail string, ip string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fail2banOutput.([]interface{})[1].(string), nil
+	return fail2banOutput.(string), nil
 }
 
 func (conn *Conn) JailFindTime(jail string) (int64, error) {
@@ -83,7 +82,7 @@ func (conn *Conn) JailFindTime(jail string) (int64, error) {
 	if err != nil {
 		return -1, err
 	}
-	return fail2banOutput.([]interface{})[1].(int64), nil
+	return fail2banOutput.(int64), nil
 }
 
 func (conn *Conn) JailSetFindTime(jail string, findTime int) (int64, error) {
@@ -91,7 +90,7 @@ func (conn *Conn) JailSetFindTime(jail string, findTime int) (int64, error) {
 	if err != nil {
 		return -1, err
 	}
-	return fail2banOutput.([]interface{})[1].(int64), nil
+	return fail2banOutput.(int64), nil
 }
 
 func (conn *Conn) JailMaxRetry(jail string) (int64, error) {
@@ -99,7 +98,7 @@ func (conn *Conn) JailMaxRetry(jail string) (int64, error) {
 	if err != nil {
 		return -1, err
 	}
-	return fail2banOutput.([]interface{})[1].(int64), nil
+	return fail2banOutput.(int64), nil
 }
 
 func (conn *Conn) JailSetMaxRetry(jail string, maxRetry int) (int64, error) {
@@ -107,7 +106,7 @@ func (conn *Conn) JailSetMaxRetry(jail string, maxRetry int) (int64, error) {
 	if err != nil {
 		return -1, err
 	}
-	return fail2banOutput.([]interface{})[1].(int64), nil
+	return fail2banOutput.(int64), nil
 }
 
 func (conn *Conn) JailUseDNS(jail string) (string, error) {
@@ -115,7 +114,7 @@ func (conn *Conn) JailUseDNS(jail string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fail2banOutput.([]interface{})[1].(string), nil
+	return fail2banOutput.(string), nil
 }
 
 func (conn *Conn) JailSetUseDNS(jail string, useDNS string) (string, error) {
@@ -123,5 +122,5 @@ func (conn *Conn) JailSetUseDNS(jail string, useDNS string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fail2banOutput.([]interface{})[1].(string), nil
+	return fail2banOutput.(string), nil
 }

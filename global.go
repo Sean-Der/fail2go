@@ -10,7 +10,7 @@ func (conn *Conn) GlobalStatus() ([]string, error) {
 		return nil, err
 	}
 
-	jails := fail2BanOutput.([]interface{})[1].([]interface{})[1].([]interface{})[1]
+	jails := fail2BanOutput.([]interface{})[1].([]interface{})[1]
 	output := make([]string, 0)
 	for _, v := range strings.Split(jails.(string), ",") {
 		output = append(output, strings.TrimSpace(v))
@@ -25,5 +25,5 @@ func (conn *Conn) GlobalPing() (string, error) {
 		return "", err
 	}
 
-	return output.([]interface{})[1].(string), nil
+	return output.(string), nil
 }
