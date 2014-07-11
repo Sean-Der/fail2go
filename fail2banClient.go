@@ -41,7 +41,8 @@ func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 
 		switch fail2banOutput.(type) {
 		case ogórek.Call:
-			return nil, errors.New(fail2banOutput.(ogórek.Call).Args[0].(string))
+			Call := fail2banOutput.(ogórek.Call)
+			return nil, errors.New(Call.Callable.Name + ": " + Call.Args[0].(string))
 		}
 	}
 
