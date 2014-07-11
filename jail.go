@@ -2,7 +2,6 @@ package fail2go
 
 import (
 	"errors"
-	"github.com/kisielk/og-rek"
 	"strconv"
 )
 
@@ -37,14 +36,7 @@ func (conn *Conn) JailAddFailRegex(jail string, regex string) ([]string, error) 
 	if err != nil {
 		return nil, err
 	}
-
-	switch fail2banOutput.(type) {
-	case ogórek.Call:
-		return nil, errors.New(fail2banOutput.(ogórek.Call).Args[0].(string))
-	case []interface{}:
-		return interfaceSliceToStringSlice(fail2banOutput.([]interface{})), nil
-	}
-	return nil, errors.New("Unexpected output from fail2ban")
+	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})), nil
 }
 
 func (conn *Conn) JailDeleteFailRegex(jail string, regex string) (interface{}, error) {

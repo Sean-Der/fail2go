@@ -34,9 +34,16 @@ func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 	}
 
 	dec := ogórek.NewDecoder(bytes.NewBuffer(buf))
-	fail2BanOutput, err := dec.Decode()
-	if fail2BanOutput != nil && err == nil {
-			fail2BanOutput = fail2BanOutput.([]interface{})[1]
+	fail2banOutput, err := dec.Decode()
+
+	if fail2banOutput != nil && err == nil {
+		fail2banOutput = fail2banOutput.([]interface{})[1]
+
+		switch fail2banOutput.(type) {
+		case ogórek.Call:
+			return nil, errors.New(fail2banOutput.(ogórek.Call).Args[0].(string))
+		}
 	}
-	return fail2BanOutput, err
+
+	return fail2banOutput, err
 }
