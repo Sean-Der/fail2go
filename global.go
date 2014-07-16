@@ -1,6 +1,9 @@
 package fail2go
 
 import (
+	"database/sql"
+	"encoding/json"
+	_ "github.com/mattn/go-sqlite3"
 	"strings"
 )
 
@@ -44,4 +47,42 @@ func (conn *Conn) GlobalSetDBFile(dbfile string) (string, error) {
 	}
 
 	return output.(string), nil
+}
+
+type Ban struct {
+	Jail, IP  string
+	TimeOfBan int
+	Data      BanData
+}
+
+type BanData struct {
+	Matches  []string
+	Failures int
+}
+
+func (conn *Conn) GlobalBans() (results []Ban, err error) {
+	DBFile, err := conn.GlobalDBFile()
+	if err != nil {
+		return nil, err
+	}
+
+	dbConn, err := sql.Open("sqlite3", DBFile)
+	if err != nil {
+		return nil, err
+	}
+	rows, err := dbConn.Query("select jail, ip, timeofban, data from bans")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var ban Ban
+		var data string
+		rows.Scan(&ban.Jail, &ban.IP, &ban.TimeOfBan, &data)
+		json.Unmarshal([]byte(data), &ban.Data)
+		results = append(results, ban)
+	}
+	rows.Close()
+
+	return results, nil
 }
