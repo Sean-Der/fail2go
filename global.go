@@ -27,3 +27,21 @@ func (conn *Conn) GlobalPing() (string, error) {
 
 	return output.(string), nil
 }
+
+func (conn *Conn) GlobalDBFile() (string, error) {
+	output, err := conn.fail2banRequest([]string{"get", "dbfile"})
+	if err != nil {
+		return "", err
+	}
+
+	return output.(string), nil
+}
+
+func (conn *Conn) GlobalSetDBFile(dbfile string) (string, error) {
+	output, err := conn.fail2banRequest([]string{"set", "dbfile", dbfile})
+	if err != nil {
+		return "", err
+	}
+
+	return output.(string), nil
+}
