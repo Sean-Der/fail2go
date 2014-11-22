@@ -124,3 +124,11 @@ func (conn *Conn) JailActions(jail string) ([]string, error) {
 	}
 	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})), nil
 }
+
+func (conn *Conn) JailActionProperty(jail, action, property string) (string, error) {
+	fail2banOutput, err := conn.fail2banRequest([]string{"get", jail, "action", action, property})
+	if err != nil {
+		return "", err
+	}
+	return fail2banOutput.(string), nil
+}
