@@ -116,3 +116,11 @@ func (conn *Conn) JailSetUseDNS(jail string, useDNS string) (string, error) {
 	}
 	return fail2banOutput.(string), nil
 }
+
+func (conn *Conn) JailActions(jail string) ([]string, error) {
+	fail2banOutput, err := conn.fail2banRequest([]string{"get", jail, "actions"})
+	if err != nil {
+		return nil, err
+	}
+	return interfaceSliceToStringSlice(fail2banOutput.([]interface{})), nil
+}
