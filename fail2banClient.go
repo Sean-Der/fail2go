@@ -3,9 +3,12 @@ package fail2go
 import (
 	"bytes"
 	"errors"
-	"github.com/kisielk/og-rek"
 	"net"
+
+	"github.com/Sean-Der/og-rek"
 )
+
+const END_COMMAND = "<F2B_END_COMMAND>"
 
 func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 	c, err := net.Dial("unix", conn.Fail2banSocket)
@@ -17,21 +20,27 @@ func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 	p := &bytes.Buffer{}
 	ogórek.NewEncoder(p).Encode(input)
 	c.Write(p.Bytes())
-	c.Write([]byte("<F2B_END_COMMAND>"))
+	c.Write([]byte(END_COMMAND))
 
 	buf := make([]byte, 0)
 	tmpBuf := make([]byte, 1)
 	for {
-		bufRead, _ := c.Read(tmpBuf)
+		bufRead, err := c.Read(tmpBuf)
 
-		if bufRead != 0 {
+		if err != nil {
+			return nil, errors.New("Failed to contact fail2ban socket")
+		} else if bufRead != 0 {
 			buf = append(buf, tmpBuf...)
+			if bytes.HasSuffix(buf, []byte(END_COMMAND)) {
+				c.Close()
+				break
+			}
 		} else {
-			buf = buf[:len(buf)-17]
 			break
 		}
 
 	}
+	buf = buf[:len(buf)-len(END_COMMAND)]
 
 	dec := ogórek.NewDecoder(bytes.NewBuffer(buf))
 	fail2banOutput, err := dec.Decode()
