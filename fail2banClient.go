@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net"
 
-	"github.com/Sean-Der/og-rek"
+	"github.com/kisielk/og-rek"
 )
 
 const END_COMMAND = "<F2B_END_COMMAND>"
