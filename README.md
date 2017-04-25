@@ -1,11 +1,11 @@
 # fail2go
 
-##Overview
+## Overview
 
 fail2go abstracts away the communication with the fail2ban socket, allowing Go programs like fail2rest to just work with
 Go data structures and not worry about serialization issues
 
-##Contributing
+## Contributing
 Every PR will be merged! Feel free to open up PRs that aren't fully done, I will do
 my best to finish them for you. I will make sure to review everything I can. If
 you are interested in working on fail2go, but don't know where to start here are some ideas.
@@ -14,7 +14,7 @@ you are interested in working on fail2go, but don't know where to start here are
 * Improve data assertions before json.marshall (this is really important!)
 * Expand fail2ban-server so that we can perform more operations via socket. I would like to avoid editing files as long as possible
 
-##License
+## License
 The MIT License (MIT)
 
 Copyright (c) 2014 Sean DuBois
