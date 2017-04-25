@@ -46,7 +46,7 @@ func (conn *Conn) fail2banRequest(input []string) (interface{}, error) {
 	fail2banOutput, err := dec.Decode()
 
 	if fail2banOutput != nil && err == nil {
-		fail2banOutput = fail2banOutput.([]interface{})[1]
+		fail2banOutput = fail2banOutput.(ogórek.Tuple)[1]
 
 		switch fail2banOutput.(type) {
 		case ogórek.Call:

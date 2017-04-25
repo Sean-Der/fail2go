@@ -3,8 +3,10 @@ package fail2go
 import (
 	"database/sql"
 	"encoding/json"
-	_ "github.com/mattn/go-sqlite3"
 	"strings"
+
+	"github.com/kisielk/og-rek"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func (conn *Conn) GlobalStatus() ([]string, error) {
@@ -13,7 +15,7 @@ func (conn *Conn) GlobalStatus() ([]string, error) {
 		return nil, err
 	}
 
-	jails := fail2BanOutput.([]interface{})[1].([]interface{})[1]
+	jails := fail2BanOutput.([]interface{})[1].(ogórek.Tuple)[1]
 	output := make([]string, 0)
 	for _, v := range strings.Split(jails.(string), ",") {
 		output = append(output, strings.TrimSpace(v))

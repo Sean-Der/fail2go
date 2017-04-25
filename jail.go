@@ -3,6 +3,8 @@ package fail2go
 import (
 	"errors"
 	"strconv"
+
+	"github.com/kisielk/og-rek"
 )
 
 func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed int64, fileList []string, currentlyBanned int64, totalBanned int64, IPList []string, err error) {
@@ -11,15 +13,15 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 		return
 	}
 
-	action := fail2banOutput.([]interface{})[1].([]interface{})[1]
-	filter := fail2banOutput.([]interface{})[0].([]interface{})[1]
+	action := fail2banOutput.([]interface{})[1].(ogórek.Tuple)[1]
+	filter := fail2banOutput.([]interface{})[0].(ogórek.Tuple)[1]
 
-	currentlyFailed = filter.([]interface{})[0].([]interface{})[1].(int64)
-	totalFailed = filter.([]interface{})[1].([]interface{})[1].(int64)
-	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].([]interface{})[1].([]interface{}))
-	currentlyBanned = action.([]interface{})[0].([]interface{})[1].(int64)
-	totalBanned = action.([]interface{})[1].([]interface{})[1].(int64)
-	IPList = interfaceSliceToStringSlice(action.([]interface{})[2].([]interface{})[1].([]interface{}))
+	currentlyFailed = filter.([]interface{})[0].(ogórek.Tuple)[1].(int64)
+	totalFailed = filter.([]interface{})[1].(ogórek.Tuple)[1].(int64)
+	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	currentlyBanned = action.([]interface{})[0].(ogórek.Tuple)[1].(int64)
+	totalBanned = action.([]interface{})[1].(ogórek.Tuple)[1].(int64)
+	IPList = interfaceSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	return
 }
 
