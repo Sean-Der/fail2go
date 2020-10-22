@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/kisielk/og-rek"
+	ogórek "github.com/kisielk/og-rek"
 )
 
 func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed int64, fileList []string, currentlyBanned int64, totalBanned int64, IPList []string, err error) {
@@ -21,7 +21,7 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	currentlyBanned = action.([]interface{})[0].(ogórek.Tuple)[1].(int64)
 	totalBanned = action.([]interface{})[1].(ogórek.Tuple)[1].(int64)
-	IPList = interfaceSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	IPList = callSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	return
 }
 
