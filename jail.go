@@ -60,6 +60,9 @@ func (conn *Conn) JailBanIP(jail string, ip string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if val, ok := fail2banOutput.(int64); ok {
+		return strconv.FormatInt(val, 10), nil
+	}
 	return fail2banOutput.(string), nil
 }
 
@@ -67,6 +70,9 @@ func (conn *Conn) JailUnbanIP(jail string, ip string) (string, error) {
 	fail2banOutput, err := conn.fail2banRequest([]string{"set", jail, "unbanip", ip})
 	if err != nil {
 		return "", err
+	}
+	if val, ok := fail2banOutput.(int64); ok {
+		return strconv.FormatInt(val, 10), nil
 	}
 	return fail2banOutput.(string), nil
 }
@@ -116,6 +122,7 @@ func (conn *Conn) JailSetUseDNS(jail string, useDNS string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return fail2banOutput.(string), nil
 }
 
