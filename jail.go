@@ -21,7 +21,12 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	currentlyBanned = action.([]interface{})[0].(ogórek.Tuple)[1].(int64)
 	totalBanned = action.([]interface{})[1].(ogórek.Tuple)[1].(int64)
-	IPList = callSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	if val, ok := action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}); ok {
+		IPList = interfaceSliceToStringSlice(val)
+	} else {
+		IPList = callSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	}
+
 	return
 }
 
