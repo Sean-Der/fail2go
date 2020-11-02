@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/kisielk/og-rek"
+	ogórek "github.com/kisielk/og-rek"
 )
 
 func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed int64, fileList []string, currentlyBanned int64, totalBanned int64, IPList []string, err error) {
@@ -21,7 +21,12 @@ func (conn *Conn) JailStatus(jail string) (currentlyFailed int64, totalFailed in
 	fileList = interfaceSliceToStringSlice(filter.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
 	currentlyBanned = action.([]interface{})[0].(ogórek.Tuple)[1].(int64)
 	totalBanned = action.([]interface{})[1].(ogórek.Tuple)[1].(int64)
-	IPList = interfaceSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	if _, ok := action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{})[0].(ogórek.Call); ok {
+		IPList = callSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	} else {
+		IPList = interfaceSliceToStringSlice(action.([]interface{})[2].(ogórek.Tuple)[1].([]interface{}))
+	}
+
 	return
 }
 
@@ -60,6 +65,9 @@ func (conn *Conn) JailBanIP(jail string, ip string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if val, ok := fail2banOutput.(int64); ok {
+		return strconv.FormatInt(val, 10), nil
+	}
 	return fail2banOutput.(string), nil
 }
 
@@ -67,6 +75,9 @@ func (conn *Conn) JailUnbanIP(jail string, ip string) (string, error) {
 	fail2banOutput, err := conn.fail2banRequest([]string{"set", jail, "unbanip", ip})
 	if err != nil {
 		return "", err
+	}
+	if val, ok := fail2banOutput.(int64); ok {
+		return strconv.FormatInt(val, 10), nil
 	}
 	return fail2banOutput.(string), nil
 }
@@ -116,6 +127,7 @@ func (conn *Conn) JailSetUseDNS(jail string, useDNS string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	return fail2banOutput.(string), nil
 }
 
